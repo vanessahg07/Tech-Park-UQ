@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>Tech-Park UQ</display-name>
+
+    <!-- Forzar al compilador JSP a usar nivel de fuente Java 8 (requerido para genéricos en JSPs en Tomcat 7) -->
+    <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <init-param>
+            <param-name>compilerSourceVM</param-name>
+            <param-value>1.8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>compilerTargetVM</param-name>
+            <param-value>1.8</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <!-- Listener de arranque: inicializa ContextoDelParque y crea el admin por defecto -->
+    <listener>
+        <listener-class>co.edu.uq.techpark.servlet.EscuchadorDeInicioApp</listener-class>
+    </listener>
+
+    <!-- ServletDelDashboard -->
+    <servlet>
+        <servlet-name>ServletDelDashboard</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDelDashboard</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDelDashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDelOperador -->
+    <servlet>
+        <servlet-name>ServletDelOperador</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDelOperador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDelOperador</servlet-name>
+        <url-pattern>/operator/panel</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeAutenticacion -->
+    <servlet>
+        <servlet-name>ServletDeAutenticacion</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeAutenticacion</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeAutenticacion</servlet-name>
+        <url-pattern>/auth</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeVisitantes -->
+    <servlet>
+        <servlet-name>ServletDeVisitantes</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeVisitantes</servlet-class>
+        <multipart-config>
+            <max-file-size>5242880</max-file-size>
+            <max-request-size>10485760</max-request-size>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeVisitantes</servlet-name>
+        <url-pattern>/visitor/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeTiquetes -->
+    <servlet>
+        <servlet-name>ServletDeTiquetes</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeTiquetes</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeTiquetes</servlet-name>
+        <url-pattern>/ticket/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeAtracciones -->
+    <servlet>
+        <servlet-name>ServletDeAtracciones</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeAtracciones</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeAtracciones</servlet-name>
+        <url-pattern>/attraction/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeCola -->
+    <servlet>
+        <servlet-name>ServletDeCola</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeCola</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeCola</servlet-name>
+        <url-pattern>/queue/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDelMapa -->
+    <servlet>
+        <servlet-name>ServletDelMapa</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDelMapa</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDelMapa</servlet-name>
+        <url-pattern>/map</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletDelMapa</servlet-name>
+        <url-pattern>/map/route</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeAlertas -->
+    <servlet>
+        <servlet-name>ServletDeAlertas</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeAlertas</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeAlertas</servlet-name>
+        <url-pattern>/alert/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDePersonal -->
+    <servlet>
+        <servlet-name>ServletDePersonal</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDePersonal</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDePersonal</servlet-name>
+        <url-pattern>/staff/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeReportes -->
+    <servlet>
+        <servlet-name>ServletDeReportes</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeReportes</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeReportes</servlet-name>
+        <url-pattern>/report</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDePersistencia -->
+    <servlet>
+        <servlet-name>ServletDePersistencia</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDePersistencia</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDePersistencia</servlet-name>
+        <url-pattern>/persistence/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ServletDeEscenario -->
+    <servlet>
+        <servlet-name>ServletDeEscenario</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeEscenario</servlet-class>
+        <multipart-config>
+            <max-file-size>10485760</max-file-size>
+            <max-request-size>20971520</max-request-size>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeEscenario</servlet-name>
+        <url-pattern>/scenario</url-pattern>
+    </servlet-mapping>
+
+    <!-- Página de bienvenida por defecto -->
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
