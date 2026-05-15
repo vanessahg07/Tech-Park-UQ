@@ -1,0 +1,36 @@
+[ZONES]
+z1|Zona Aventura Extrema|300
+z2|Zona Acuática|200
+z3|Zona Familiar|250
+
+[ATTRACTIONS]
+a1|Montaña Rusa Extrema|MECANICA_DE_ALTURA|12|140|12|8000|z1
+a2|Torre del Terror|MECANICA_DE_ALTURA|8|130|10|6000|z1
+a3|Tobogán Gigante|ACUATICA|10|0|5|4000|z2
+a4|Río Salvaje|ACUATICA|15|0|6|3500|z2
+a5|Carrusel Mágico|ESPECTACULO|20|0|0|0|z3
+a6|Casa del Terror|MECANICA|10|0|12|5000|z3
+a7|Tren Fantasma|MECANICA|16|0|8|2500|z3
+
+[EDGES]
+a1|a2|50
+a1|a3|200
+a2|a4|180
+a3|a4|60
+a3|a5|150
+a4|a6|120
+a5|a6|80
+a5|a7|90
+a6|a7|40
+
+[STAFF]
+admin|admin123|Administrador Principal|ADMINISTRADOR|
+op1|oper123|Carlos Ramírez|OPERADOR|z1
+op2|oper456|Laura Gómez|OPERADOR|z2
+op3|oper789|Pedro Sánchez|OPERADOR|z3
+
+[VISITORS]
+Ana Torres|11111111|28|168|150000
+Juan Pérez|22222222|35|175|200000
+María López|33333333|16|162|80000
+Diego Martínez|44444444|10|138|50000
