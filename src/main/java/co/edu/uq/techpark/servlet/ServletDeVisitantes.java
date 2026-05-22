@@ -9,7 +9,6 @@ import co.edu.uq.techpark.model.Visitante;
 import co.edu.uq.techpark.model.RegistroDeVisita;
 import co.edu.uq.techpark.service.ServicioDeVisitantes;
 import co.edu.uq.techpark.util.ExcepcionDelParque;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -195,6 +194,27 @@ public class ServletDeVisitantes extends HttpServlet {
                 }
             }
             resp.sendRedirect(req.getContextPath() + "/visitor/favorites");
+
+        } else if ("/recharge".equals(ruta)) {
+            // El visitante recarga su propio saldo virtual
+            Visitante visitante = (Visitante) req.getSession().getAttribute("user");
+            if (visitante == null) {
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
+                return;
+            }
+            try {
+                double monto = Double.parseDouble(req.getParameter("amount"));
+                if (monto <= 0) throw new ExcepcionDelParque("El monto debe ser mayor a cero");
+                visitante.setSaldoVirtual(visitante.getSaldoVirtual() + monto);
+                req.getSession().setAttribute("user", visitante);
+                req.getSession().setAttribute("flashMessage",
+                        "Recarga exitosa: $" + String.format("%,.2f", monto) + " agregados a tu saldo");
+            } catch (NumberFormatException e) {
+                req.getSession().setAttribute("flashError", "Monto inválido");
+            } catch (ExcepcionDelParque e) {
+                req.getSession().setAttribute("flashError", e.getMessage());
+            }
+            resp.sendRedirect(req.getContextPath() + "/visitor/profile");
         }
     }
 

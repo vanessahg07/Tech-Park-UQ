@@ -10,6 +10,11 @@
     Visitante visitante = (Visitante) session.getAttribute("user");
     String error = (String) request.getAttribute("error");
     String success = (String) request.getAttribute("success");
+    // Flash messages from redirects
+    String flashMessage = (String) session.getAttribute("flashMessage");
+    String flashError   = (String) session.getAttribute("flashError");
+    if (flashMessage != null) session.removeAttribute("flashMessage");
+    if (flashError   != null) session.removeAttribute("flashError");
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -59,6 +64,12 @@
     <% } %>
     <% if (success != null) { %>
     <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <% if (flashMessage != null) { %>
+    <div class="alert alert-success alert-dismissible fade show"><%= flashMessage %><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    <% } %>
+    <% if (flashError != null) { %>
+    <div class="alert alert-danger alert-dismissible fade show"><%= flashError %><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <% } %>
 
     <div class="row g-4">
@@ -127,6 +138,31 @@
         </div>
     </div>
 
+    <!-- Recarga de saldo virtual -->
+    <div class="card mt-4 border-success">
+        <div class="card-header bg-success text-white fw-semibold">💳 Recargar saldo virtual</div>
+        <div class="card-body">
+            <p class="text-muted small mb-3">
+                Saldo actual: <strong class="text-success">$<%= String.format("%,.2f", visitante.getSaldoVirtual()) %></strong>
+            </p>
+            <form method="post" action="${pageContext.request.contextPath}/visitor/recharge" class="row g-2 align-items-end">
+                <div class="col-sm-6">
+                    <label for="rechargeAmount" class="form-label">Monto a recargar ($)</label>
+                    <input type="number" class="form-control" id="rechargeAmount" name="amount"
+                           min="1000" step="1000" placeholder="Ej: 50000" required>
+                </div>
+                <div class="col-sm-auto">
+                    <button type="submit" class="btn btn-success">Recargar</button>
+                </div>
+            </form>
+            <div class="mt-2 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-success btn-sm preset-btn" data-amount="20000">+ $20.000</button>
+                <button type="button" class="btn btn-outline-success btn-sm preset-btn" data-amount="50000">+ $50.000</button>
+                <button type="button" class="btn btn-outline-success btn-sm preset-btn" data-amount="100000">+ $100.000</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Formulario de actualización -->
     <div class="card mt-4">
         <div class="card-header bg-white fw-semibold">Actualizar perfil</div>
@@ -149,5 +185,13 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Botones de recarga rápida
+    document.querySelectorAll('.preset-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.getElementById('rechargeAmount').value = this.dataset.amount;
+        });
+    });
+</script>
 </body>
 </html>
