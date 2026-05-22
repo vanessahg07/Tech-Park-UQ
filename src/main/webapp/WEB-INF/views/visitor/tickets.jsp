@@ -141,7 +141,7 @@
                         <option value="" disabled selected>Selecciona un tipo...</option>
                         <option value="GENERAL">General — $50.000</option>
                         <option value="FAMILIAR">Familiar — $42.500</option>
-                        <option value="FAST_PASS">Fast-Pass — $80.000</option>
+                        <option value="PASE_RAPIDO">Fast-Pass — $80.000</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">
