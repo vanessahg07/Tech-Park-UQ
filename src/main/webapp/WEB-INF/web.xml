@@ -169,6 +169,20 @@
         <url-pattern>/scenario</url-pattern>
     </servlet-mapping>
 
+    <!-- ServletDeAdminVisitantes -->
+    <servlet>
+        <servlet-name>ServletDeAdminVisitantes</servlet-name>
+        <servlet-class>co.edu.uq.techpark.servlet.ServletDeAdminVisitantes</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletDeAdminVisitantes</servlet-name>
+        <url-pattern>/admin/visitors/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletDeAdminVisitantes</servlet-name>
+        <url-pattern>/admin/visitors</url-pattern>
+    </servlet-mapping>
+
     <!-- Página de bienvenida por defecto -->
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>

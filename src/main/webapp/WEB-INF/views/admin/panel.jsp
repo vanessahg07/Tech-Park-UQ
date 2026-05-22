@@ -60,6 +60,11 @@
                 <div class="display-4 mb-2">👷</div><h5 class="card-title text-success">Personal</h5>
                 <p class="card-text text-muted small">Crear, editar y asignar operadores a zonas.</p>
             </div></div></a></div>
+        <div class="col"><a href="${pageContext.request.contextPath}/admin/visitors" class="text-decoration-none">
+            <div class="card h-100 border-success"><div class="card-body text-center py-4">
+                <div class="display-4 mb-2">👥</div><h5 class="card-title text-success">Visitantes</h5>
+                <p class="card-text text-muted small">Consultar visitantes y recargar saldo virtual.</p>
+            </div></div></a></div>
         <div class="col"><a href="${pageContext.request.contextPath}/alert/list" class="text-decoration-none">
             <div class="card h-100 border-warning"><div class="card-body text-center py-4">
                 <div class="display-4 mb-2">⚠️</div><h5 class="card-title text-warning">Alertas Climáticas</h5>
