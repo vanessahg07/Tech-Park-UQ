@@ -245,13 +245,21 @@
     <% for (ListaEnlazada.Iterador<DatosNodo> _nli = nodes.iterador(); _nli.tieneSiguiente(); ) { DatosNodo _nd3 = _nli.siguiente();
            String _ns = _nd3.estado;
            String _badgeStyle;
-           if ("ACTIVE".equals(_ns))       { _badgeStyle = "background:#4a7c59;color:#fff;"; }
-           else if ("MAINTENANCE".equals(_ns)) { _badgeStyle = "background:#BC6C25;color:#fff;"; }
-           else                            { _badgeStyle = "background:#9b3a3a;color:#fff;"; }
+           if ("ACTIVA".equals(_ns) || "ACTIVE".equals(_ns)) {
+               _badgeStyle = "background:#4a7c59;color:#fff;";
+           } else if ("EN_MANTENIMIENTO".equals(_ns) || "MAINTENANCE".equals(_ns)) {
+               _badgeStyle = "background:#BC6C25;color:#fff;";
+           } else {
+               _badgeStyle = "background:#9b3a3a;color:#fff;";
+           }
            String _badgeLabel;
-           if ("ACTIVE".equals(_ns))       { _badgeLabel = "Activa"; }
-           else if ("MAINTENANCE".equals(_ns)) { _badgeLabel = "Mantenimiento"; }
-           else                            { _badgeLabel = "Cerrada"; }
+           if ("ACTIVA".equals(_ns) || "ACTIVE".equals(_ns)) {
+               _badgeLabel = "Activa";
+           } else if ("EN_MANTENIMIENTO".equals(_ns) || "MAINTENANCE".equals(_ns)) {
+               _badgeLabel = "Mantenimiento";
+           } else {
+               _badgeLabel = "Cerrada";
+           }
     %>
     <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--card-border);">
       <div style="flex:1;">
@@ -311,8 +319,10 @@ const ROUTE = [<% if (route != null) {
 } %>];
 
 // ── Color helpers ─────────────────────────────────────────────────────────────
-const STATUS_COLOR = { ACTIVE:"#4a7c59", MAINTENANCE:"#c9a227", CLOSED:"#c0392b" };
-const STATUS_STROKE = { ACTIVE:"#2d5a3d", MAINTENANCE:"#8a6f1a", CLOSED:"#8b1a1a" };
+const STATUS_COLOR  = { ACTIVA:"#4a7c59", EN_MANTENIMIENTO:"#BC6C25", CERRADA:"#9b3a3a",
+                        ACTIVE:"#4a7c59",  MAINTENANCE:"#BC6C25",      CLOSED:"#9b3a3a" };
+const STATUS_STROKE = { ACTIVA:"#2d5a3d", EN_MANTENIMIENTO:"#8a6f1a", CERRADA:"#8b1a1a",
+                        ACTIVE:"#2d5a3d",  MAINTENANCE:"#8a6f1a",      CLOSED:"#8b1a1a" };
 
 function isOnRoute(id) { return ROUTE.includes(id); }
 function isEdgeOnRoute(from, to) {
@@ -466,8 +476,10 @@ function renderGraph() {
 // ── Tooltip ───────────────────────────────────────────────────────────────────
 const tooltip = document.getElementById("mapTooltip");
 function showTooltip(ev, n) {
-  const statusLabel = { ACTIVE:"Activa", MAINTENANCE:"Mantenimiento", CLOSED:"Cerrada" };
-  const statusColor = { ACTIVE:"#4a7c59", MAINTENANCE:"#c9a227", CLOSED:"#c0392b" };
+  const statusLabel = { ACTIVA:"Activa", EN_MANTENIMIENTO:"Mantenimiento", CERRADA:"Cerrada",
+                        ACTIVE:"Activa",  MAINTENANCE:"Mantenimiento",      CLOSED:"Cerrada" };
+  const statusColor = { ACTIVA:"#4a7c59", EN_MANTENIMIENTO:"#BC6C25", CERRADA:"#9b3a3a",
+                        ACTIVE:"#4a7c59",  MAINTENANCE:"#BC6C25",      CLOSED:"#9b3a3a" };
   tooltip.innerHTML =
     '<strong style="font-size:.9rem;">' + n.icon + ' ' + n.name + '</strong><br>' +
     '<span style="color:' + (statusColor[n.status]||"#888") + ';font-weight:600;">' + (statusLabel[n.status]||n.status) + '</span><br>' +
