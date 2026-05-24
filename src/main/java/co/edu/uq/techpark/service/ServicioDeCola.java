@@ -7,7 +7,6 @@ import co.edu.uq.techpark.model.ContextoDelParque;
 import co.edu.uq.techpark.model.Visitante;
 import co.edu.uq.techpark.model.RegistroDeVisita;
 import co.edu.uq.techpark.util.ExcepcionDelParque;
-
 import java.time.LocalDateTime;
 
 /**
@@ -45,8 +44,23 @@ public class ServicioDeCola {
                     new RegistroDeVisita(atraccion.getId(), atraccion.getNombre(), LocalDateTime.now()));
             atraccion.setVisitantesAcumulados(atraccion.getVisitantesAcumulados() + 1);
             procesados.agregarAlFinal(visitante);
+
+            // Notificar al visitante que acaba de ser procesado en el ciclo
+            ServicioDeNotificaciones.notificar(visitante,
+                    "🎢 ¡Disfrutaste \"" + atraccion.getNombre() + "\"! Se descontaron $"
+                    + String.format("%,.2f", atraccion.getCostoAdicional()) + " de tu saldo.");
         }
+
         ServicioDeAtracciones.verificarMantenimientoPreventivo(atraccion, contexto);
+
+        // Notificar al siguiente visitante en la cola que es su turno
+        Visitante siguiente = atraccion.getColaVirtual().verPrimero();
+        if (siguiente != null && atraccion.getEstado() == EstadoAtraccion.ACTIVA) {
+            ServicioDeNotificaciones.notificar(siguiente,
+                    "🔔 ¡Es tu turno! Eres el primero en la cola de \"" + atraccion.getNombre()
+                    + "\". Dirígete a la atracción.");
+        }
+
         return procesados;
     }
 

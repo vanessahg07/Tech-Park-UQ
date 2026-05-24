@@ -1,5 +1,6 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="co.edu.uq.techpark.model.RegistroDeVisita" %>
+<%@ page import="co.edu.uq.techpark.model.Visitante" %>
 <%@ page import="co.edu.uq.techpark.ds.ListaEnlazada" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%
@@ -9,6 +10,9 @@
     }
     ListaEnlazada<RegistroDeVisita> historial = (ListaEnlazada<RegistroDeVisita>) request.getAttribute("history");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    Visitante visitanteNav = (Visitante) session.getAttribute("user");
+    int notifCount = (visitanteNav != null && visitanteNav.getNotificacionesSinLeer() != null)
+                     ? visitanteNav.getNotificacionesSinLeer().tamanio() : 0;
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -36,7 +40,9 @@
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/map">Mapa</a></li>
                 <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/visitor/history">Historial</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/favorites">Favoritos</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones
+                    <% if (notifCount > 0) { %><span class="badge bg-danger rounded-pill"><%= notifCount %></span><% } %>
+                </a></li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

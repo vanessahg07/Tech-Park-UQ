@@ -8,6 +8,7 @@ import co.edu.uq.techpark.model.Personal;
 import co.edu.uq.techpark.model.Visitante;
 import co.edu.uq.techpark.model.RegistroDeVisita;
 import co.edu.uq.techpark.service.ServicioDeVisitantes;
+import co.edu.uq.techpark.service.ServicioDeNotificaciones;
 import co.edu.uq.techpark.util.ExcepcionDelParque;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -195,8 +196,26 @@ public class ServletDeVisitantes extends HttpServlet {
             }
             resp.sendRedirect(req.getContextPath() + "/visitor/favorites");
 
-        } else if ("/recharge".equals(ruta)) {
-            // El visitante recarga su propio saldo virtual
+        } else if ("/notifications/read".equals(ruta)) {
+            Visitante visitante = (Visitante) req.getSession().getAttribute("user");
+            if (visitante == null) {
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
+                return;
+            }
+            String markAll = req.getParameter("markAll");
+            if ("true".equals(markAll)) {
+                // Marcar todas como leídas vaciando la lista
+                visitante.getNotificacionesSinLeer().limpiar();
+            } else {
+                String idNotificacion = req.getParameter("notificationId");
+                if (idNotificacion != null && !idNotificacion.isEmpty()) {
+                    ServicioDeNotificaciones.marcarComoLeida(visitante, idNotificacion);
+                }
+            }
+            req.getSession().setAttribute("user", visitante);
+            resp.sendRedirect(req.getContextPath() + "/visitor/notifications");
+
+        } else if ("/recharge".equals(ruta)) {            // El visitante recarga su propio saldo virtual
             Visitante visitante = (Visitante) req.getSession().getAttribute("user");
             if (visitante == null) {
                 resp.sendRedirect(req.getContextPath() + "/login.jsp");

@@ -31,6 +31,11 @@ public class ServicioDeAlertas {
                 atraccion.setMotivoCierre("clima");
                 atraccion.setFechaCierre(ahora);
                 alerta.getIdsDeAtraccionesAfectadas().agregarAlFinal(atraccion.getId());
+
+                // Notificar a los visitantes en cola de esta atracción
+                ServicioDeAtracciones.notificarColaAtraccion(atraccion, contexto,
+                        "⛈️ La atracción \"" + atraccion.getNombre() + "\" ha sido cerrada por alerta climática ("
+                        + tipo.name().replace("_", " ").toLowerCase() + "). Tu turno en la cola ha sido cancelado.");
             }
         }
 

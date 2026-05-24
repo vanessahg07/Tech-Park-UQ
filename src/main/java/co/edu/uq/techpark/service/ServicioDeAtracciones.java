@@ -4,7 +4,6 @@ import co.edu.uq.techpark.model.Atraccion;
 import co.edu.uq.techpark.model.EstadoAtraccion;
 import co.edu.uq.techpark.model.ContextoDelParque;
 import co.edu.uq.techpark.util.ExcepcionDelParque;
-
 import java.time.LocalDateTime;
 
 /**
@@ -41,10 +40,21 @@ public class ServicioDeAtracciones {
                                      String motivo, ContextoDelParque contexto) throws ExcepcionDelParque {
         Atraccion atraccion = contexto.getAtraccionesPorId().buscar(idAtraccion);
         if (atraccion == null) throw new ExcepcionDelParque("Atracción no encontrada: " + idAtraccion);
+
+        EstadoAtraccion estadoAnterior = atraccion.getEstado();
         atraccion.setEstado(nuevoEstado);
+
         if (nuevoEstado == EstadoAtraccion.CERRADA || nuevoEstado == EstadoAtraccion.EN_MANTENIMIENTO) {
             atraccion.setMotivoCierre(motivo);
             atraccion.setFechaCierre(LocalDateTime.now());
+
+            // Notificar a todos los visitantes que estaban en la cola de esta atracción
+            String razon = nuevoEstado == EstadoAtraccion.EN_MANTENIMIENTO
+                    ? "mantenimiento" : (motivo != null && !motivo.isEmpty() ? motivo : "cierre operativo");
+            String emoji = nuevoEstado == EstadoAtraccion.EN_MANTENIMIENTO ? "🔧" : "🚫";
+            notificarColaAtraccion(atraccion, contexto,
+                    emoji + " La atracción \"" + atraccion.getNombre() + "\" ha sido cerrada por " + razon
+                    + ". Tu turno en la cola ha sido cancelado.");
         } else {
             atraccion.setMotivoCierre(null);
             atraccion.setFechaCierre(null);
@@ -69,6 +79,24 @@ public class ServicioDeAtracciones {
             atraccion.setEstado(EstadoAtraccion.EN_MANTENIMIENTO);
             atraccion.setMotivoCierre("mantenimiento preventivo");
             atraccion.setFechaCierre(LocalDateTime.now());
+
+            // Notificar a los visitantes que aún quedaron en cola
+            notificarColaAtraccion(atraccion, contexto,
+                    "🔧 La atracción \"" + atraccion.getNombre() + "\" ha entrado en mantenimiento preventivo "
+                    + "(500 visitantes alcanzados). Tu turno en la cola ha sido cancelado.");
+        }
+    }
+
+    /**
+     * Notifica a todos los visitantes que están actualmente en la cola de una atracción.
+     * Se usa cuando la atracción cierra o entra en mantenimiento.
+     */
+    static void notificarColaAtraccion(Atraccion atraccion, ContextoDelParque contexto, String mensaje) {
+        co.edu.uq.techpark.ds.ListaEnlazada<co.edu.uq.techpark.model.Visitante> enCola =
+                atraccion.getColaVirtual().instantanea();
+        for (co.edu.uq.techpark.ds.ListaEnlazada.Iterador<co.edu.uq.techpark.model.Visitante> it =
+                enCola.iterador(); it.tieneSiguiente(); ) {
+            ServicioDeNotificaciones.notificar(it.siguiente(), mensaje);
         }
     }
 }

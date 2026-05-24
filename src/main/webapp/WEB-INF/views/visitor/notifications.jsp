@@ -1,5 +1,6 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="co.edu.uq.techpark.model.Notificacion" %>
+<%@ page import="co.edu.uq.techpark.model.Visitante" %>
 <%@ page import="co.edu.uq.techpark.ds.ListaEnlazada" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%
@@ -11,6 +12,9 @@
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     String error   = (String) request.getAttribute("error");
     String success = (String) request.getAttribute("success");
+    Visitante visitanteNav = (Visitante) session.getAttribute("user");
+    int notifCount = (visitanteNav != null && visitanteNav.getNotificacionesSinLeer() != null)
+                     ? visitanteNav.getNotificacionesSinLeer().tamanio() : 0;
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -38,7 +42,9 @@
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/map">Mapa</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/history">Historial</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/favorites">Favoritos</a></li>
-                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones</a></li>
+                <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones
+                    <% if (notifCount > 0) { %><span class="badge bg-danger rounded-pill"><%= notifCount %></span><% } %>
+                </a></li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -69,11 +75,19 @@
     <% } else { %>
     <div class="list-group">
         <% for (ListaEnlazada.Iterador<Notificacion> _nit = notificaciones.iterador(); _nit.tieneSiguiente(); ) {
-               Notificacion notif = _nit.siguiente(); %>
-        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start gap-3">
+               Notificacion notif = _nit.siguiente();
+               String msg = notif.getMensaje() != null ? notif.getMensaje() : "";
+               String itemClass = "list-group-item-light";
+               if (msg.startsWith("🔔"))      itemClass = "list-group-item-success";
+               else if (msg.startsWith("🎢")) itemClass = "list-group-item-info";
+               else if (msg.startsWith("🚫")) itemClass = "list-group-item-danger";
+               else if (msg.startsWith("🔧")) itemClass = "list-group-item-warning";
+               else if (msg.startsWith("⛈️")) itemClass = "list-group-item-danger";
+        %>
+        <div class="list-group-item list-group-item-action <%= itemClass %> d-flex justify-content-between align-items-start gap-3">
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between">
-                    <p class="mb-1"><%= notif.getMensaje() %></p>
+                    <p class="mb-1"><%= msg %></p>
                     <small class="text-muted text-nowrap ms-3"><%= notif.getCreadaEn() != null ? notif.getCreadaEn().format(fmt) : "—" %></small>
                 </div>
                 <% if (!notif.isLeida()) { %><span class="badge bg-primary">Nueva</span><% } %>

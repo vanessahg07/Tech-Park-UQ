@@ -12,6 +12,8 @@
     String error = (String) request.getAttribute("error");
     String success = (String) request.getAttribute("success");
     Tiquete tiqueteActivo = visitante != null ? visitante.getTiqueteActivo() : null;
+    int notifCount = (visitante != null && visitante.getNotificacionesSinLeer() != null)
+                     ? visitante.getNotificacionesSinLeer().tamanio() : 0;
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,7 +41,9 @@
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/map">Mapa</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/history">Historial</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/favorites">Favoritos</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/visitor/notifications">Notificaciones
+                    <% if (notifCount > 0) { %><span class="badge bg-danger rounded-pill"><%= notifCount %></span><% } %>
+                </a></li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
