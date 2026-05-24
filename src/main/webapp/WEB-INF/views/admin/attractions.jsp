@@ -66,11 +66,20 @@
                         for (ListaEnlazada.Iterador<Atraccion> _it = atracciones.iterador(); _it.tieneSiguiente(); ) {
                             Atraccion a = _it.siguiente();
                             String estadoNombre = a.getEstado() != null ? a.getEstado().name() : "CERRADA";
+                            String estadoLabel2;
+                            String estadoStyle2;
+                            if ("ACTIVA".equals(estadoNombre)) {
+                                estadoLabel2 = "Activa"; estadoStyle2 = "background:#4a7c59;color:#fff;";
+                            } else if ("EN_MANTENIMIENTO".equals(estadoNombre)) {
+                                estadoLabel2 = "Mantenimiento"; estadoStyle2 = "background:#BC6C25;color:#fff;";
+                            } else {
+                                estadoLabel2 = "Cerrada"; estadoStyle2 = "background:#9b3a3a;color:#fff;";
+                            }
                     %>
                         <tr>
                             <td class="fw-semibold"><%= a.getNombre() %></td>
                             <td><span class="badge bg-secondary"><%= a.getTipo() != null ? a.getTipo().name() : "-" %></span></td>
-                            <td><span class="badge badge-<%= estadoNombre %>"><%= estadoNombre %></span></td>
+                            <td><span class="badge" style="<%= estadoStyle2 %>"><%= estadoLabel2 %></span></td>
                             <td><%= a.getEstaturaMinimaEnCm() > 0 ? a.getEstaturaMinimaEnCm() + " cm" : "—" %></td>
                             <td><%= a.getEdadMinima() > 0 ? a.getEdadMinima() + " años" : "—" %></td>
                             <td><%= a.getCapacidadMaximaPorCiclo() %></td>

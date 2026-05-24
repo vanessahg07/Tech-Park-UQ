@@ -84,11 +84,11 @@
   <% if (error != null) { %><div class="alert alert-danger mb-3"><%= error %></div><% } %>
 
   <div class="d-flex gap-2 mb-3 flex-wrap">
-    <span class="badge badge-ACTIVE">● Activa</span>
-    <span class="badge badge-MAINTENANCE">● Mantenimiento</span>
-    <span class="badge badge-CLOSED">● Cerrada</span>
+    <span class="badge" style="background:#4a7c59;color:#fff;">&#9679; Activa</span>
+    <span class="badge" style="background:#BC6C25;color:#fff;">&#9679; Mantenimiento</span>
+    <span class="badge" style="background:#9b3a3a;color:#fff;">&#9679; Cerrada</span>
     <% if (route != null && !route.estaVacia()) { %>
-    <span class="badge" style="background:var(--olive);color:#fff;">● Ruta calculada</span>
+    <span class="badge" style="background:var(--olive);color:#fff;">&#9679; Ruta calculada</span>
     <% } %>
   </div>
 
@@ -244,7 +244,14 @@
     <div style="max-height:340px;overflow-y:auto;">
     <% for (ListaEnlazada.Iterador<DatosNodo> _nli = nodes.iterador(); _nli.tieneSiguiente(); ) { DatosNodo _nd3 = _nli.siguiente();
            String _ns = _nd3.estado;
-           String _badgeClass = "badge-" + _ns;
+           String _badgeStyle;
+           if ("ACTIVE".equals(_ns))       { _badgeStyle = "background:#4a7c59;color:#fff;"; }
+           else if ("MAINTENANCE".equals(_ns)) { _badgeStyle = "background:#BC6C25;color:#fff;"; }
+           else                            { _badgeStyle = "background:#9b3a3a;color:#fff;"; }
+           String _badgeLabel;
+           if ("ACTIVE".equals(_ns))       { _badgeLabel = "Activa"; }
+           else if ("MAINTENANCE".equals(_ns)) { _badgeLabel = "Mantenimiento"; }
+           else                            { _badgeLabel = "Cerrada"; }
     %>
     <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--card-border);">
       <div style="flex:1;">
@@ -252,7 +259,7 @@
         <div style="font-size:.74rem;color:var(--carbon-muted);">Cola: <%= _nd3.cola %> &middot; ~<%= _nd3.espera %> min</div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
-        <span class="badge <%= _badgeClass %>" style="font-size:.68rem;"><%= _ns %></span>
+        <span class="badge" style="<%= _badgeStyle %>font-size:.68rem;"><%= _badgeLabel %></span>
         <form method="post" action="${pageContext.request.contextPath}/visitor/favorites/add" style="margin:0;">
           <input type="hidden" name="attractionId" value="<%= _nd3.id %>">
           <button type="submit" class="btn btn-sm btn-outline-warning" style="padding:2px 8px;font-size:.7rem;" title="Agregar a favoritos">⭐</button>

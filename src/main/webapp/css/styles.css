@@ -356,9 +356,15 @@ code {
 .bg-light     { background: var(--sand) !important; color: var(--carbon) !important; }
 
 /* Status badges */
+/* Status badges — nombres en español (enum Java) */
+.badge-ACTIVA         { background: #4a7c59 !important; color: #fff !important; }
+.badge-CERRADA        { background: #9b3a3a !important; color: #fff !important; }
+.badge-EN_MANTENIMIENTO { background: #BC6C25 !important; color: #fff !important; }
+
+/* Status badges — nombres en inglés (legacy) */
 .badge-ACTIVE      { background: #4a7c59 !important; color: #fff !important; }
 .badge-CLOSED      { background: #9b3a3a !important; color: #fff !important; }
-.badge-MAINTENANCE { background: var(--terracotta) !important; color: #fff !important; }
+.badge-MAINTENANCE { background: #BC6C25 !important; color: #fff !important; }
 
 .attraction-badge-ACTIVE      { background: #4a7c59; }
 .attraction-badge-CLOSED      { background: #9b3a3a; }

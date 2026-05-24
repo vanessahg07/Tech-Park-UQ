@@ -1,9 +1,11 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ page import="co.edu.uq.techpark.model.Personal" %>
 <%@ page import="co.edu.uq.techpark.model.Atraccion" %>
+<%@ page import="co.edu.uq.techpark.model.EstadoAtraccion" %>
 <%@ page import="co.edu.uq.techpark.service.ServicioDeReportes" %>
 <%@ page import="co.edu.uq.techpark.ds.ListaEnlazada" %>
 <%
+    response.setCharacterEncoding("UTF-8");
     if (session == null || !"ADMIN".equals(session.getAttribute("role"))) {
         response.sendRedirect(request.getContextPath() + "/login.jsp"); return;
     }
@@ -70,13 +72,33 @@
                             <tr><td colspan="5" class="text-center text-muted py-3">Sin datos registrados.</td></tr>
                         <% } else { int rango = 1;
                             for (ListaEnlazada.Iterador<Atraccion> _it = reporte.atraccionesPorVisitantes.iterador(); _it.tieneSiguiente(); ) {
-                                Atraccion a = _it.siguiente(); %>
+                                Atraccion a = _it.siguiente();
+                                String estadoNombre = a.getEstado() != null ? a.getEstado().name() : "CERRADA";
+                                String estadoLabel;
+                                String estadoStyle;
+                                if (EstadoAtraccion.ACTIVA.equals(a.getEstado())) {
+                                    estadoLabel = "Activa";
+                                    estadoStyle = "background:#4a7c59;color:#fff;";
+                                } else if (EstadoAtraccion.EN_MANTENIMIENTO.equals(a.getEstado())) {
+                                    estadoLabel = "Mantenimiento";
+                                    estadoStyle = "background:#BC6C25;color:#fff;";
+                                } else {
+                                    estadoLabel = "Cerrada";
+                                    estadoStyle = "background:#9b3a3a;color:#fff;";
+                                }
+                        %>
                         <tr>
-                            <td><% if (rango==1) { %>🥇<% } else if (rango==2) { %>🥈<% } else if (rango==3) { %>🥉<% } else { %><span class="badge bg-secondary"><%= rango %></span><% } rango++; %></td>
+                            <td>
+                                <% if (rango == 1) { %><span class="badge bg-warning text-dark fw-bold">1</span>
+                                <% } else if (rango == 2) { %><span class="badge bg-secondary fw-bold">2</span>
+                                <% } else if (rango == 3) { %><span class="badge" style="background:#cd7f32;color:#fff;font-weight:700;">3</span>
+                                <% } else { %><span class="badge bg-secondary"><%= rango %></span>
+                                <% } rango++; %>
+                            </td>
                             <td class="fw-semibold"><%= a.getNombre() %></td>
                             <td><small class="text-muted"><%= a.getTipo() != null ? a.getTipo().name() : "—" %></small></td>
                             <td><strong><%= a.getVisitantesAcumulados() %></strong></td>
-                            <td><span class="badge badge-<%= a.getEstado() != null ? a.getEstado().name() : "CERRADA" %>"><%= a.getEstado() != null ? a.getEstado().name() : "?" %></span></td>
+                            <td><span class="badge" style="<%= estadoStyle %>"><%= estadoLabel %></span></td>
                         </tr>
                         <% } } %>
                         </tbody>

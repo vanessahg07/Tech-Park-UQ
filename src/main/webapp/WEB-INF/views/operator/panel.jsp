@@ -114,9 +114,14 @@
             EstadoAtraccion attrStatus = attr.getEstado();
             String statusName = attrStatus != null ? attrStatus.name() : "CERRADA";
             String statusLabel;
-            if ("ACTIVA".equals(statusName))              { statusLabel = "Activa"; }
-            else if ("EN_MANTENIMIENTO".equals(statusName)) { statusLabel = "Mantenimiento"; }
-            else                                            { statusLabel = "Cerrada"; }
+            String statusStyle;
+            if ("ACTIVA".equals(statusName)) {
+                statusLabel = "Activa"; statusStyle = "background:#4a7c59;color:#fff;";
+            } else if ("EN_MANTENIMIENTO".equals(statusName)) {
+                statusLabel = "Mantenimiento"; statusStyle = "background:#BC6C25;color:#fff;";
+            } else {
+                statusLabel = "Cerrada"; statusStyle = "background:#9b3a3a;color:#fff;";
+            }
 
             String typeName = attr.getTipo() != null ? attr.getTipo().name() : "";
             String typeLabel;
@@ -134,7 +139,7 @@
             <div class="card attraction-card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h6 class="mb-0 fw-bold"><%= attr.getNombre() %></h6>
-                    <span class="badge badge-<%= statusName %> rounded-pill"><%= statusLabel %></span>
+                    <span class="badge rounded-pill" style="<%= statusStyle %>"><%= statusLabel %></span>
                 </div>
                 <div class="card-body">
 
