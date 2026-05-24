@@ -54,11 +54,11 @@
     <% } else { %>
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold">$<%= String.format("%,.0f", reporte.ingresosTotales) %></div><div class="text-muted small">Ingresos Totales</div></div></div>
-        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold"><%= reporte.cierresPorAlertaClimatica %></div><div class="text-muted small">Cierres por Alerta</div></div></div>
-        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold"><%= reporte.atraccionesEnMantenimiento.tamanio() %></div><div class="text-muted small">En Mantenimiento</div></div></div>
+        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-danger"><%= reporte.cierresPorAlertaClimatica %></div><div class="text-muted small">Cierres por Alerta</div></div></div>
+        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-warning"><%= reporte.atraccionesEnMantenimiento.tamanio() %></div><div class="text-muted small">En Mantenimiento</div></div></div>
+        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-danger"><%= reporte.atraccionesCerradas.tamanio() %></div><div class="text-muted small">Cerradas</div></div></div>
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold"><%= String.format("%.1f", reporte.minutosEsperaPromedio) %></div><div class="text-muted small">Espera Prom. (min)</div></div></div>
-    </div>
-    <div class="row g-4">
+    </div>    <div class="row g-4">
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-header bg-primary"><h6 class="mb-0 text-white">🏆 Atracciones por Visitantes</h6></div>
@@ -100,6 +100,28 @@
                             <td class="fw-semibold small"><%= am.getNombre() %></td>
                             <td><%= am.getVisitantesAcumulados() %></td>
                             <td><small class="text-muted"><%= am.getMotivoCierre() != null ? am.getMotivoCierre() : "Preventivo" %></small></td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                    <% } %>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header bg-danger"><h6 class="mb-0 text-white">🚫 Cerradas</h6></div>
+                <div class="card-body p-0">
+                    <% if (reporte.atraccionesCerradas.estaVacia()) { %>
+                    <div class="text-center py-3 text-muted small">✅ Ninguna cerrada</div>
+                    <% } else { %>
+                    <table class="table table-hover mb-0">
+                        <thead><tr><th>Atracción</th><th>Visitantes</th><th>Motivo</th></tr></thead>
+                        <tbody>
+                        <% for (ListaEnlazada.Iterador<Atraccion> _it3 = reporte.atraccionesCerradas.iterador(); _it3.tieneSiguiente(); ) {
+                               Atraccion ac = _it3.siguiente(); %>
+                        <tr>
+                            <td class="fw-semibold small"><%= ac.getNombre() %></td>
+                            <td><%= ac.getVisitantesAcumulados() %></td>
+                            <td><small class="text-muted"><%= ac.getMotivoCierre() != null ? ac.getMotivoCierre() : "—" %></small></td>
                         </tr>
                         <% } %>
                         </tbody>

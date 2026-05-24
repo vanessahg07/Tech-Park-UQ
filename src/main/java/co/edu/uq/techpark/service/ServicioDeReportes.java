@@ -17,16 +17,20 @@ public class ServicioDeReportes {
         public final double minutosEsperaPromedio;
         public final int cierresPorAlertaClimatica;
         public final ListaEnlazada<Atraccion> atraccionesEnMantenimiento;
+        public final ListaEnlazada<Atraccion> atraccionesCerradas;
         public final boolean jornadaEnCurso;
 
         public ReporteDeJornada(double ingresosTotales, ListaEnlazada<Atraccion> atraccionesPorVisitantes,
                                 double minutosEsperaPromedio, int cierresPorAlertaClimatica,
-                                ListaEnlazada<Atraccion> atraccionesEnMantenimiento, boolean jornadaEnCurso) {
+                                ListaEnlazada<Atraccion> atraccionesEnMantenimiento,
+                                ListaEnlazada<Atraccion> atraccionesCerradas,
+                                boolean jornadaEnCurso) {
             this.ingresosTotales = ingresosTotales;
             this.atraccionesPorVisitantes = atraccionesPorVisitantes;
             this.minutosEsperaPromedio = minutosEsperaPromedio;
             this.cierresPorAlertaClimatica = cierresPorAlertaClimatica;
             this.atraccionesEnMantenimiento = atraccionesEnMantenimiento;
+            this.atraccionesCerradas = atraccionesCerradas;
             this.jornadaEnCurso = jornadaEnCurso;
         }
     }
@@ -55,13 +59,22 @@ public class ServicioDeReportes {
         }
 
         ListaEnlazada<Atraccion> enMantenimiento = new ListaEnlazada<>();
+        ListaEnlazada<Atraccion> cerradas = new ListaEnlazada<>();
+        int cierresPorClima = 0;
         for (ListaEnlazada.Iterador<Atraccion> it = todas.iterador(); it.tieneSiguiente(); ) {
             Atraccion a = it.siguiente();
-            if (EstadoAtraccion.EN_MANTENIMIENTO.equals(a.getEstado())) enMantenimiento.agregarAlFinal(a);
+            if (EstadoAtraccion.EN_MANTENIMIENTO.equals(a.getEstado())) {
+                enMantenimiento.agregarAlFinal(a);
+            } else if (EstadoAtraccion.CERRADA.equals(a.getEstado())) {
+                cerradas.agregarAlFinal(a);
+                if ("clima".equals(a.getMotivoCierre())) cierresPorClima++;
+            }
         }
+        // Sumar también las alertas ya canceladas del historial
+        cierresPorClima += contexto.getHistorialDeAlertas().tamanio();
 
         return new ReporteDeJornada(ingresosTotales, ordenadas, promedioEspera,
-                contexto.getHistorialDeAlertas().tamanio(), enMantenimiento, true);
+                cierresPorClima, enMantenimiento, cerradas, true);
     }
 
     /** Insertion sort descendente por visitantesAcumulados — sin java.util.Collections. */
@@ -105,6 +118,17 @@ public class ServicioDeReportes {
             sb.append("  (ninguna)\n");
         } else {
             for (ListaEnlazada.Iterador<Atraccion> it = reporte.atraccionesEnMantenimiento.iterador(); it.tieneSiguiente(); ) {
+                Atraccion a = it.siguiente();
+                sb.append("  - ").append(a.getNombre());
+                if (a.getMotivoCierre() != null) sb.append(" (").append(a.getMotivoCierre()).append(")");
+                sb.append("\n");
+            }
+        }
+        sb.append("\n--- Atracciones cerradas ---\n");
+        if (reporte.atraccionesCerradas.estaVacia()) {
+            sb.append("  (ninguna)\n");
+        } else {
+            for (ListaEnlazada.Iterador<Atraccion> it = reporte.atraccionesCerradas.iterador(); it.tieneSiguiente(); ) {
                 Atraccion a = it.siguiente();
                 sb.append("  - ").append(a.getNombre());
                 if (a.getMotivoCierre() != null) sb.append(" (").append(a.getMotivoCierre()).append(")");
