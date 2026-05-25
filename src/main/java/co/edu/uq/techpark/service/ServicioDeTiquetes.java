@@ -44,6 +44,7 @@ public class ServicioDeTiquetes {
         visitante.setTiqueteActivo(tiquete);
         visitante.setSaldoVirtual(visitante.getSaldoVirtual() - precio);
         contexto.setVisitantesActualesEnElParque(contexto.getVisitantesActualesEnElParque() + 1);
+        contexto.agregarIngresoPorTiquete(precio);
         return tiquete;
     }
 }

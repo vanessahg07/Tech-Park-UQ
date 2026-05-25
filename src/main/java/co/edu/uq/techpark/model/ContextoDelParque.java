@@ -56,6 +56,9 @@ public class ContextoDelParque implements Serializable {
     /** Cantidad actual de visitantes con tiquete activo en el parque. */
     private int visitantesActualesEnElParque;
 
+    /** Acumulado de ingresos por venta de tiquetes en la jornada. */
+    private double ingresosPorTiquetes;
+
     /** Fecha de la jornada actual. */
     private LocalDate fechaJornadaActual;
 
@@ -126,6 +129,10 @@ public class ContextoDelParque implements Serializable {
 
     public int getVisitantesActualesEnElParque() { return visitantesActualesEnElParque; }
     public void setVisitantesActualesEnElParque(int v) { this.visitantesActualesEnElParque = v; }
+
+    public double getIngresosPorTiquetes() { return ingresosPorTiquetes; }
+    public void setIngresosPorTiquetes(double v) { this.ingresosPorTiquetes = v; }
+    public void agregarIngresoPorTiquete(double monto) { this.ingresosPorTiquetes += monto; }
 
     public LocalDate getFechaJornadaActual() { return fechaJornadaActual; }
     public void setFechaJornadaActual(LocalDate v) { this.fechaJornadaActual = v; }

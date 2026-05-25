@@ -56,6 +56,8 @@
     <% } else { %>
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold">$<%= String.format("%,.0f", reporte.ingresosTotales) %></div><div class="text-muted small">Ingresos Totales</div></div></div>
+        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-5 fw-bold text-success">$<%= String.format("%,.0f", reporte.ingresosPorTiquetes) %></div><div class="text-muted small">Por Tiquetes</div></div></div>
+        <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-5 fw-bold text-info">$<%= String.format("%,.0f", reporte.ingresosPorAtracciones) %></div><div class="text-muted small">Por Atracciones</div></div></div>
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-danger"><%= reporte.cierresPorAlertaClimatica %></div><div class="text-muted small">Cierres por Alerta</div></div></div>
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-warning"><%= reporte.atraccionesEnMantenimiento.tamanio() %></div><div class="text-muted small">En Mantenimiento</div></div></div>
         <div class="col-6 col-md-3"><div class="card text-center p-3"><div class="fs-4 fw-bold text-danger"><%= reporte.atraccionesCerradas.tamanio() %></div><div class="text-muted small">Cerradas</div></div></div>
