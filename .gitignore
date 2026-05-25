@@ -27,10 +27,3 @@ Thumbs.db
 # Logs
 *.log
 
-# Documentación de Kiro (guía propia)
-.kiro/specs/
-.kiro/steering/
-.kiro/skills/
-.kiro/settings/
-CAMBIOS_REALIZADOS.md
-BUG_MODAL_CORREGIDO.md
