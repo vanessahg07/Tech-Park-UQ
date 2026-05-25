@@ -94,7 +94,7 @@
                         <li>✔ Cola virtual prioridad 2</li>
                         <li>✔ Precio base</li>
                     </ul>
-                    <p class="fw-semibold">Precio estimado: <span class="text-success">$50.000</span></p>
+                    <p class="fw-semibold">Precio: <span class="text-success">$65.000</span></p>
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                         <li>✔ Cola virtual prioridad 2</li>
                         <li>✔ Descuento familiar aplicado</li>
                     </ul>
-                    <p class="fw-semibold">Precio estimado: <span class="text-success">$42.500</span></p>
+                    <p class="fw-semibold">Precio: <span class="text-success">$55.250</span></p>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
                         <li>✔ Cola virtual prioridad 1 (máxima)</li>
                         <li>✔ Atención preferencial</li>
                     </ul>
-                    <p class="fw-semibold">Precio estimado: <span class="text-success">$80.000</span></p>
+                    <p class="fw-semibold">Precio: <span class="text-success">$100.000</span></p>
                 </div>
             </div>
         </div>
@@ -143,9 +143,9 @@
                     <label for="ticketType" class="form-label">Tipo de tiquete</label>
                     <select class="form-select" id="ticketType" name="ticketType" required>
                         <option value="" disabled selected>Selecciona un tipo...</option>
-                        <option value="GENERAL">General — $50.000</option>
-                        <option value="FAMILIAR">Familiar — $42.500</option>
-                        <option value="PASE_RAPIDO">Fast-Pass — $80.000</option>
+                        <option value="GENERAL">General — $65.000</option>
+                        <option value="FAMILIAR">Familiar — $55.250</option>
+                        <option value="PASE_RAPIDO">Fast-Pass — $100.000</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">

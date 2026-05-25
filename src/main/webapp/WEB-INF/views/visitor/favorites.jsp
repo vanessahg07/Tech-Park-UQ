@@ -112,9 +112,6 @@
                     <div>
                         <h6 class="card-title mb-1">⭐ <%= nombreMostrado %></h6>
                         <% if (!badgeEstado.isEmpty()) { %><%= badgeEstado %><% } %>
-                        <% if (attr != null && attr.getCostoAdicional() > 0) { %>
-                        <p class="small text-muted mt-1 mb-0">Costo adicional: $<%= String.format("%,.2f", attr.getCostoAdicional()) %></p>
-                        <% } %>
                     </div>
                     <form method="post" action="${pageContext.request.contextPath}/visitor/favorites/remove" class="ms-2">
                         <input type="hidden" name="attractionId" value="<%= favId %>">

@@ -32,7 +32,6 @@ public class ServicioDeAtracciones {
         existente.setCapacidadMaximaPorCiclo(atraccion.getCapacidadMaximaPorCiclo());
         existente.setEstaturaMinimaEnCm(atraccion.getEstaturaMinimaEnCm());
         existente.setEdadMinima(atraccion.getEdadMinima());
-        existente.setCostoAdicional(atraccion.getCostoAdicional());
         existente.setIdZona(atraccion.getIdZona());
     }
 

@@ -27,9 +27,6 @@ public class ServicioDeCola {
             throw new ExcepcionDelParque("Estatura insuficiente: mínimo " + atraccion.getEstaturaMinimaEnCm() + " cm");
         if (visitante.getEdad() < atraccion.getEdadMinima())
             throw new ExcepcionDelParque("Edad insuficiente: mínimo " + atraccion.getEdadMinima() + " años");
-        if (visitante.getSaldoVirtual() < atraccion.getCostoAdicional())
-            throw new ExcepcionDelParque("Saldo insuficiente: requerido " + atraccion.getCostoAdicional()
-                    + ", disponible " + visitante.getSaldoVirtual());
         atraccion.getColaVirtual().encolar(visitante, visitante.getTiqueteActivo().getPrioridad());
     }
 
@@ -39,7 +36,6 @@ public class ServicioDeCola {
         for (int i = 0; i < atraccion.getCapacidadMaximaPorCiclo(); i++) {
             Visitante visitante = atraccion.getColaVirtual().desencolar();
             if (visitante == null) break;
-            visitante.setSaldoVirtual(visitante.getSaldoVirtual() - atraccion.getCostoAdicional());
             visitante.getHistorialDeVisitas().agregarAlFinal(
                     new RegistroDeVisita(atraccion.getId(), atraccion.getNombre(), LocalDateTime.now()));
             atraccion.setVisitantesAcumulados(atraccion.getVisitantesAcumulados() + 1);
@@ -47,8 +43,7 @@ public class ServicioDeCola {
 
             // Notificar al visitante que acaba de ser procesado en el ciclo
             ServicioDeNotificaciones.notificar(visitante,
-                    "🎢 ¡Disfrutaste \"" + atraccion.getNombre() + "\"! Se descontaron $"
-                    + String.format("%,.2f", atraccion.getCostoAdicional()) + " de tu saldo.");
+                    "🎢 ¡Disfrutaste \"" + atraccion.getNombre() + "\"!");
         }
 
         ServicioDeAtracciones.verificarMantenimientoPreventivo(atraccion, contexto);

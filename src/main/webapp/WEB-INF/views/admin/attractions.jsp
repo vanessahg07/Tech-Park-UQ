@@ -173,7 +173,6 @@
                     <div class="col-6"><label class="form-label">Min. Estatura (cm)</label><input type="number" name="minHeightCm" class="form-control" value="<%= a.getEstaturaMinimaEnCm() %>" min="0"></div>
                     <div class="col-6"><label class="form-label">Min. Edad</label><input type="number" name="minAge" class="form-control" value="<%= a.getEdadMinima() %>" min="0"></div>
                     <div class="col-6"><label class="form-label">Cap. por Ciclo</label><input type="number" name="maxCapacityPerCycle" class="form-control" value="<%= a.getCapacidadMaximaPorCiclo() %>" min="1"></div>
-                    <div class="col-6"><label class="form-label">Costo Adicional</label><input type="number" step="0.01" name="additionalCost" class="form-control" value="<%= a.getCostoAdicional() %>" min="0"></div>
                 </div>
             </div>
             <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
@@ -195,7 +194,6 @@
                     <div class="col-6"><label class="form-label">Min. Estatura (cm)</label><input type="number" name="minHeightCm" class="form-control" value="0" min="0"></div>
                     <div class="col-6"><label class="form-label">Min. Edad</label><input type="number" name="minAge" class="form-control" value="0" min="0"></div>
                     <div class="col-6"><label class="form-label">Cap. por Ciclo <span class="text-danger">*</span></label><input type="number" name="maxCapacityPerCycle" class="form-control" value="10" min="1" required></div>
-                    <div class="col-6"><label class="form-label">Costo Adicional</label><input type="number" step="0.01" name="additionalCost" class="form-control" value="0" min="0"></div>
                 </div>
             </div>
             <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Crear</button></div>

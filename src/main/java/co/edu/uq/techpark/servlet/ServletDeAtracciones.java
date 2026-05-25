@@ -38,7 +38,6 @@ public class ServletDeAtracciones extends HttpServlet {
                 a.setCapacidadMaximaPorCiclo(Integer.parseInt(req.getParameter("maxCapacityPerCycle")));
                 a.setEstaturaMinimaEnCm(Integer.parseInt(req.getParameter("minHeightCm")));
                 a.setEdadMinima(Integer.parseInt(req.getParameter("minAge")));
-                a.setCostoAdicional(Double.parseDouble(req.getParameter("additionalCost")));
                 a.setIdZona(req.getParameter("zoneId"));
                 ServicioDeAtracciones.agregar(a, contexto);
             } else if ("/update".equals(ruta)) {
@@ -49,7 +48,6 @@ public class ServletDeAtracciones extends HttpServlet {
                 a.setCapacidadMaximaPorCiclo(Integer.parseInt(req.getParameter("maxCapacityPerCycle")));
                 a.setEstaturaMinimaEnCm(Integer.parseInt(req.getParameter("minHeightCm")));
                 a.setEdadMinima(Integer.parseInt(req.getParameter("minAge")));
-                a.setCostoAdicional(Double.parseDouble(req.getParameter("additionalCost")));
                 a.setIdZona(req.getParameter("zoneId"));
                 ServicioDeAtracciones.actualizar(a, contexto);
             } else if ("/status".equals(ruta)) {

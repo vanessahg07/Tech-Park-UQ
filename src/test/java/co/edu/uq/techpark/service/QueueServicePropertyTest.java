@@ -31,12 +31,11 @@ class QueueServicePropertyTest {
         return v;
     }
 
-    private static Atraccion crearAtraccion(int edadMin, int estaturaMinCm, double costo, EstadoAtraccion estado) {
+    private static Atraccion crearAtraccion(int edadMin, int estaturaMinCm, EstadoAtraccion estado) {
         Atraccion a = new Atraccion();
         a.setNombre("A-" + UUID.randomUUID());
         a.setEdadMinima(edadMin);
         a.setEstaturaMinimaEnCm(estaturaMinCm);
-        a.setCostoAdicional(costo);
         a.setEstado(estado);
         a.setCapacidadMaximaPorCiclo(10);
         a.setMinutosEsperaEstimados(5);
@@ -51,7 +50,7 @@ class QueueServicePropertyTest {
             @ForAll @IntRange(min = 1, max = 50) int deficit) {
 
         Visitante visitante = crearVisitante(18, estaturaMin - deficit, 1000.0);
-        Atraccion atraccion = crearAtraccion(0, estaturaMin, 0.0, EstadoAtraccion.ACTIVA);
+        Atraccion atraccion = crearAtraccion(0, estaturaMin, EstadoAtraccion.ACTIVA);
         int antes = atraccion.getColaVirtual().tamanio();
         assertThrows(ExcepcionDelParque.class,
                 () -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
@@ -65,7 +64,7 @@ class QueueServicePropertyTest {
             @ForAll @IntRange(min = 2, max = 100) int edadMin) {
 
         Visitante visitante = crearVisitante(edadMin - 1, 200, 1000.0);
-        Atraccion atraccion = crearAtraccion(edadMin, 0, 0.0, EstadoAtraccion.ACTIVA);
+        Atraccion atraccion = crearAtraccion(edadMin, 0, EstadoAtraccion.ACTIVA);
         int antes = atraccion.getColaVirtual().tamanio();
         assertThrows(ExcepcionDelParque.class,
                 () -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
@@ -80,7 +79,7 @@ class QueueServicePropertyTest {
             @ForAll @IntRange(min = 50, max = 200) int estaturaMin) {
 
         Visitante visitante = crearVisitante(edadMin, estaturaMin, 1000.0);
-        Atraccion atraccion = crearAtraccion(edadMin, estaturaMin, 0.0, EstadoAtraccion.ACTIVA);
+        Atraccion atraccion = crearAtraccion(edadMin, estaturaMin, EstadoAtraccion.ACTIVA);
         assertDoesNotThrow(() -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
         assertTrue(atraccion.getColaVirtual().posicionDe(visitante) >= 1);
     }
@@ -90,7 +89,7 @@ class QueueServicePropertyTest {
     @Tag("Feature: tech-park-uq, Property 10: Atraccion no activa rechaza enqueue")
     void atraccionEnMantenimiento_rechazaEncolar(@ForAll @IntRange(min = 18, max = 80) int edad) {
         Visitante visitante = crearVisitante(edad, 150, 1000.0);
-        Atraccion atraccion = crearAtraccion(0, 0, 0.0, EstadoAtraccion.EN_MANTENIMIENTO);
+        Atraccion atraccion = crearAtraccion(0, 0, EstadoAtraccion.EN_MANTENIMIENTO);
         int antes = atraccion.getColaVirtual().tamanio();
         assertThrows(ExcepcionDelParque.class,
                 () -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
@@ -102,34 +101,22 @@ class QueueServicePropertyTest {
     @Tag("Feature: tech-park-uq, Property 10: Atraccion no activa rechaza enqueue")
     void atraccionCerrada_rechazaEncolar(@ForAll @IntRange(min = 18, max = 80) int edad) {
         Visitante visitante = crearVisitante(edad, 150, 1000.0);
-        Atraccion atraccion = crearAtraccion(0, 0, 0.0, EstadoAtraccion.CERRADA);
+        Atraccion atraccion = crearAtraccion(0, 0, EstadoAtraccion.CERRADA);
         int antes = atraccion.getColaVirtual().tamanio();
         assertThrows(ExcepcionDelParque.class,
                 () -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
         assertEquals(antes, atraccion.getColaVirtual().tamanio());
     }
 
-    // P14 — saldo insuficiente
+    // P14 — con el nuevo modelo de tiquete todo incluido, cualquier visitante con tiquete activo puede entrar
     @Property(tries = 100)
     @Tag("Feature: tech-park-uq, Property 14: Saldo insuficiente siempre deniega el acceso")
-    void saldoInsuficiente_denegaAcceso(
-            @ForAll @IntRange(min = 1, max = 10_000) int costo) {
+    void visitanteConTiquete_puedeEncolar_sinImportarSaldo(
+            @ForAll @IntRange(min = 0, max = 10_000) int saldo) {
 
-        double saldo = costo - 1;
-        Visitante visitante = crearVisitante(18, 150, saldo);
-        Atraccion atraccion = crearAtraccion(0, 0, (double) costo, EstadoAtraccion.ACTIVA);
-        double antes = visitante.getSaldoVirtual();
-        assertThrows(ExcepcionDelParque.class,
-                () -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
-        assertEquals(antes, visitante.getSaldoVirtual(), 1e-9);
-    }
-
-    // P14 — saldo exacto es admitido
-    @Property(tries = 100)
-    @Tag("Feature: tech-park-uq, Property 14: Saldo insuficiente siempre deniega el acceso")
-    void saldoExacto_esAdmitido(@ForAll @IntRange(min = 0, max = 10_000) int costo) {
-        Visitante visitante = crearVisitante(18, 150, (double) costo);
-        Atraccion atraccion = crearAtraccion(0, 0, (double) costo, EstadoAtraccion.ACTIVA);
+        Visitante visitante = crearVisitante(18, 150, (double) saldo);
+        Atraccion atraccion = crearAtraccion(0, 0, EstadoAtraccion.ACTIVA);
         assertDoesNotThrow(() -> ServicioDeCola.encolar(visitante, atraccion, new ContextoDelParque()));
+        assertTrue(atraccion.getColaVirtual().posicionDe(visitante) >= 1);
     }
 }

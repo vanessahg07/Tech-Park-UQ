@@ -35,9 +35,6 @@ public class Atraccion implements Serializable {
     /** Edad mínima en años para poder subir. 0 = sin restricción. */
     private int edadMinima;
 
-    /** Costo adicional en pesos que se descuenta del saldo virtual del visitante. */
-    private double costoAdicional;
-
     /** Total de visitantes que han completado un ciclo en esta atracción durante la jornada. */
     private int visitantesAcumulados;
 
@@ -82,9 +79,6 @@ public class Atraccion implements Serializable {
 
     public int getEdadMinima() { return edadMinima; }
     public void setEdadMinima(int edadMinima) { this.edadMinima = edadMinima; }
-
-    public double getCostoAdicional() { return costoAdicional; }
-    public void setCostoAdicional(double costoAdicional) { this.costoAdicional = costoAdicional; }
 
     public int getVisitantesAcumulados() { return visitantesAcumulados; }
     public void setVisitantesAcumulados(int visitantesAcumulados) { this.visitantesAcumulados = visitantesAcumulados; }

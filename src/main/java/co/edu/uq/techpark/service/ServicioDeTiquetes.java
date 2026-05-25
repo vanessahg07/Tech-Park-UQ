@@ -15,9 +15,9 @@ import java.util.UUID;
  */
 public class ServicioDeTiquetes {
 
-    public static final double PRECIO_GENERAL    = 50000.0;
-    public static final double DESCUENTO_FAMILIAR = 0.15;
-    public static final double PRECIO_PASE_RAPIDO = 80000.0;
+    public static final double PRECIO_GENERAL     = 65000.0;
+    public static final double DESCUENTO_FAMILIAR  = 0.15;
+    public static final double PRECIO_PASE_RAPIDO  = 100000.0;
 
     private ServicioDeTiquetes() {}
 

@@ -13,8 +13,6 @@ public class ServicioDeReportes {
 
     public static class ReporteDeJornada {
         public final double ingresosTotales;
-        public final double ingresosPorTiquetes;
-        public final double ingresosPorAtracciones;
         public final ListaEnlazada<Atraccion> atraccionesPorVisitantes;
         public final double minutosEsperaPromedio;
         public final int cierresPorAlertaClimatica;
@@ -22,16 +20,13 @@ public class ServicioDeReportes {
         public final ListaEnlazada<Atraccion> atraccionesCerradas;
         public final boolean jornadaEnCurso;
 
-        public ReporteDeJornada(double ingresosTotales, double ingresosPorTiquetes,
-                                double ingresosPorAtracciones,
+        public ReporteDeJornada(double ingresosTotales,
                                 ListaEnlazada<Atraccion> atraccionesPorVisitantes,
                                 double minutosEsperaPromedio, int cierresPorAlertaClimatica,
                                 ListaEnlazada<Atraccion> atraccionesEnMantenimiento,
                                 ListaEnlazada<Atraccion> atraccionesCerradas,
                                 boolean jornadaEnCurso) {
             this.ingresosTotales = ingresosTotales;
-            this.ingresosPorTiquetes = ingresosPorTiquetes;
-            this.ingresosPorAtracciones = ingresosPorAtracciones;
             this.atraccionesPorVisitantes = atraccionesPorVisitantes;
             this.minutosEsperaPromedio = minutosEsperaPromedio;
             this.cierresPorAlertaClimatica = cierresPorAlertaClimatica;
@@ -46,13 +41,7 @@ public class ServicioDeReportes {
     public static ReporteDeJornada generarReporteDeJornada(ContextoDelParque contexto) {
         ListaEnlazada<Atraccion> todas = contexto.getAtraccionesPorId().enOrden();
 
-        double ingresosPorAtracciones = 0.0;
-        for (ListaEnlazada.Iterador<Atraccion> it = todas.iterador(); it.tieneSiguiente(); ) {
-            Atraccion a = it.siguiente();
-            ingresosPorAtracciones += a.getVisitantesAcumulados() * a.getCostoAdicional();
-        }
-        double ingresosPorTiquetes = contexto.getIngresosPorTiquetes();
-        double ingresosTotales = ingresosPorAtracciones + ingresosPorTiquetes;
+        double ingresosTotales = contexto.getIngresosPorTiquetes();
 
         // Ordenar por visitantes acumulados descendente (insertion sort sobre ListaEnlazada)
         ListaEnlazada<Atraccion> ordenadas = ordenarPorVisitantesDesc(todas);
@@ -81,8 +70,8 @@ public class ServicioDeReportes {
         // Sumar también las alertas ya canceladas del historial
         cierresPorClima += contexto.getHistorialDeAlertas().tamanio();
 
-        return new ReporteDeJornada(ingresosTotales, ingresosPorTiquetes, ingresosPorAtracciones,
-                ordenadas, promedioEspera, cierresPorClima, enMantenimiento, cerradas, true);
+        return new ReporteDeJornada(ingresosTotales, ordenadas, promedioEspera,
+                cierresPorClima, enMantenimiento, cerradas, true);
     }
 
     /** Insertion sort descendente por visitantesAcumulados — sin java.util.Collections. */
@@ -113,8 +102,6 @@ public class ServicioDeReportes {
         sb.append("========================================\n\n");
         sb.append("Estado jornada : ").append(reporte.jornadaEnCurso ? "En curso" : "Finalizada").append("\n");
         sb.append("Ingresos totales: $").append(String.format("%.2f", reporte.ingresosTotales)).append("\n");
-        sb.append("  - Por tiquetes   : $").append(String.format("%.2f", reporte.ingresosPorTiquetes)).append("\n");
-        sb.append("  - Por atracciones: $").append(String.format("%.2f", reporte.ingresosPorAtracciones)).append("\n");
         sb.append("Espera promedio : ").append(String.format("%.1f", reporte.minutosEsperaPromedio)).append(" min\n");
         sb.append("Cierres por alerta climática: ").append(reporte.cierresPorAlertaClimatica).append("\n\n");
         sb.append("--- Atracciones por visitantes (desc) ---\n");

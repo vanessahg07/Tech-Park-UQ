@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  *
  * Formato del archivo:
  *   [ZONES]       id|nombre|aforoMaximo
- *   [ATTRACTIONS] id|nombre|tipo|capacidadMaximaPorCiclo|estaturaMinimaEnCm|edadMinima|costoAdicional|idZona
+ *   [ATTRACTIONS] id|nombre|tipo|capacidadMaximaPorCiclo|estaturaMinimaEnCm|edadMinima|idZona
  *   [EDGES]       idDesde|idHasta|pesoEnMetros
  *   [STAFF]       nombreUsuario|contrasena|nombreCompleto|rol|idZona
  *   [VISITORS]    nombreCompleto|numeroDocumento|edad|estaturaCm|saldoVirtual
@@ -109,7 +109,7 @@ public class ServicioDeEscenario {
 
     private static void parsearAtraccion(String linea, int nl, ContextoDelParque ctx) {
         String[] p = linea.split("\\|", -1);
-        if (p.length != 8) throw new ExcepcionDelParque("Error en línea " + nl + ": formato de atracción inválido");
+        if (p.length != 7) throw new ExcepcionDelParque("Error en línea " + nl + ": formato de atracción inválido");
         Atraccion a = new Atraccion();
         a.setId(p[0].trim());
         a.setNombre(p[1].trim());
@@ -119,9 +119,8 @@ public class ServicioDeEscenario {
             a.setCapacidadMaximaPorCiclo(Integer.parseInt(p[3].trim()));
             a.setEstaturaMinimaEnCm(Integer.parseInt(p[4].trim()));
             a.setEdadMinima(Integer.parseInt(p[5].trim()));
-            a.setCostoAdicional(Double.parseDouble(p[6].trim()));
         } catch (NumberFormatException e) { throw new ExcepcionDelParque("Error en línea " + nl + ": valor numérico inválido en atracción"); }
-        a.setIdZona(p[7].trim());
+        a.setIdZona(p[6].trim());
         ctx.getAtraccionesPorId().insertar(a.getId(), a);
         ctx.getAtraccionesPorNombre().insertar(a.getNombre(), a);
         ctx.getGrafoDelParque().agregarNodo(a.getId());

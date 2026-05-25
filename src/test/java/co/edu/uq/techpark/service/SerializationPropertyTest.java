@@ -60,7 +60,6 @@ class SerializationPropertyTest {
             @ForAll String nombre,
             @ForAll @IntRange(min = 0, max = 250) int estaturaMinCm,
             @ForAll @IntRange(min = 0, max = 120) int edadMin,
-            @ForAll @DoubleRange(min = 0.0, max = 10_000.0) double costoAdicional,
             @ForAll EstadoAtraccion estado
     ) throws IOException, ClassNotFoundException {
 
@@ -68,7 +67,6 @@ class SerializationPropertyTest {
         original.setNombre(nombre);
         original.setEstaturaMinimaEnCm(estaturaMinCm);
         original.setEdadMinima(edadMin);
-        original.setCostoAdicional(costoAdicional);
         original.setEstado(estado);
 
         Atraccion deserializado = roundTrip(original);
@@ -76,7 +74,6 @@ class SerializationPropertyTest {
         assertEquals(original.getNombre(), deserializado.getNombre());
         assertEquals(original.getEstaturaMinimaEnCm(), deserializado.getEstaturaMinimaEnCm());
         assertEquals(original.getEdadMinima(), deserializado.getEdadMinima());
-        assertEquals(original.getCostoAdicional(), deserializado.getCostoAdicional());
         assertEquals(original.getEstado(), deserializado.getEstado());
     }
 
